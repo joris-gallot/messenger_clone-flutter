@@ -20,98 +20,121 @@ class _ChatsViewState extends State<ChatsView> {
     return Scaffold(
         body: CustomScrollView(slivers: <Widget>[
       SliverAppBar(
+          expandedHeight: 155.0,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(35.0),
             child: Text(''),
           ),
-          floating: true,
-          // expandedHeight: 250.0,s
+          floating: false,
+          pinned: true,
+          snap: false,
           flexibleSpace: SafeArea(
             child: Padding(
               padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-              child: Column(
+              child: ListView(
                 children: [
-                  Stack(
+                  Column(
                     children: [
-                      Positioned(
-                          right: 0,
-                          top: 0,
-                          child: InkWell(
-                            customBorder: CircleBorder(),
-                            onTap: () {
-                              print('open settings');
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.all(5),
-                              child: Center(
-                                child: Icon(
-                                  Icons.settings,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          )),
-                      Row(
+                      Stack(
                         children: [
-                          Stack(
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundImage:
-                                    NetworkImage("https://i.pravatar.cc/300"),
-                              ),
-                              Positioned(
-                                right: -2,
-                                top: 0,
-                                child: Container(
-                                  width: 20,
-                                  height: 20,
+                          Positioned(
+                              right: 0,
+                              top: 0,
+                              child: InkWell(
+                                customBorder: CircleBorder(),
+                                onTap: () {
+                                  print('open settings');
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.all(5),
                                   child: Center(
-                                      child: Text(
-                                    '3',
-                                    style: TextStyle(
-                                        fontSize: NOTIFICATION_TEXT_SIZE),
-                                  )),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: Theme.of(context).primaryColor,
-                                        width: 2,
-                                      ),
-                                      color: Colors.red),
+                                    child: Icon(
+                                      Icons.settings,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                              )),
+                          Row(
                             children: [
-                              Text('Discussions',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: TITLE_TEXT_SIZE,
-                                  )),
-                              Text(
-                                'Martin Durant',
-                                style: TextStyle(
-                                    fontSize: SUB_TITLE_TEXT_SIZE,
-                                    color: Color.fromRGBO(172, 172, 172, 10)),
+                              Stack(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 30,
+                                    backgroundImage:
+                                        NetworkImage("https://i.pravatar.cc/300"),
+                                  ),
+                                  Positioned(
+                                    right: -2,
+                                    top: 0,
+                                    child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: Center(
+                                          child: Text(
+                                        '3',
+                                        style: TextStyle(
+                                            fontSize: NOTIFICATION_TEXT_SIZE),
+                                      )),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Theme.of(context).primaryColor,
+                                            width: 2,
+                                          ),
+                                          color: Colors.red),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Discussions',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: TITLE_TEXT_SIZE,
+                                      )),
+                                  Text(
+                                    'Martin Durant',
+                                    style: TextStyle(
+                                        fontSize: SUB_TITLE_TEXT_SIZE,
+                                        color: Color.fromRGBO(172, 172, 172, 10)),
+                                  )
+                                ],
                               )
                             ],
-                          )
+                          ),
                         ],
                       ),
+                      SizedBox(height: 20,),
+                      TextField(
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
+                          suffixIcon: Icon(Icons.search),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(99)),
+                            borderSide: BorderSide.none
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(99)),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          hintText: 'Rechercher...'
+                        ),
+                      )
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
           )),
       FutureBuilder(
-        future: getUsers(),
+        future: getUsers(null),
         builder: (context, projectSnap) {
           var childCount = 0;
 
@@ -213,7 +236,8 @@ class _ChatsViewState extends State<ChatsView> {
     ]));
   }
 
-  Future<Map> getUsers() async {
+  Future<Map> getUsers(search) async {
+    print(search);
     String apiUrl = 'https://randomuser.me/api?results=30';
     var response = await http.get(apiUrl);
 
