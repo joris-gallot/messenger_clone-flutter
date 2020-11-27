@@ -34,7 +34,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin {
   final random = Random();
   TabController _controller;
-  // int _selectedIndex = 0;
+  int _selectedIndex = 0;
 
   List<Widget> list = [
     Tab(
@@ -50,6 +50,12 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
     super.initState();
 
     _controller = TabController(length: list.length, vsync: this);
+
+    _controller.addListener(() {
+      setState(() {
+        _selectedIndex = _controller.index;
+      });
+    });
   }
 
   @override
@@ -131,7 +137,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Discussions',
+                                  Text(_selectedIndex == 0 ? 'Discussions' : 'Contacts',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: TITLE_TEXT_SIZE,
