@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'views/chats.dart';
+import 'views/contacts.dart';
 import './constants.dart';
 import 'dart:math';
 
@@ -33,7 +34,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin {
   final random = Random();
   TabController _controller;
-  // int _selectedIndex = 0;
+  int _selectedIndex = 0;
 
   List<Widget> list = [
     Tab(
@@ -46,17 +47,15 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    // Create TabController for getting the index of current tab
+
     _controller = TabController(length: list.length, vsync: this);
 
-    // _controller.addListener(() {
-    //   setState(() {
-    //     _selectedIndex = _controller.index;
-    //   });
-    //   print("Selected Index: " + _controller.index.toString());
-    // });
+    _controller.addListener(() {
+      setState(() {
+        _selectedIndex = _controller.index;
+      });
+    });
   }
 
   @override
@@ -138,7 +137,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Discussions',
+                                  Text(_selectedIndex == 0 ? 'Discussions' : 'Contacts',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: TITLE_TEXT_SIZE,
@@ -187,8 +186,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
           controller: _controller,
           children: [
             ChatsView(),
-            Text('ContactsView')
-            // ContactsView()
+            ContactsView()
           ]
         ),
       )

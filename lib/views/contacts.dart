@@ -31,14 +31,17 @@ class _ContactsViewState extends State<ContactsView> {
           childCount = projectSnap.data["results"].length;
         }
 
-        return SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
+        return ListView.builder(
+          padding: EdgeInsets.all(0.0),
+          itemCount: childCount,
+          itemBuilder: (context, index) {
             var user = projectSnap.data["results"][index];
 
             if (projectSnap.connectionState != ConnectionState.done) {
               return Container(
                   margin: EdgeInsets.only(top: 20),
-                  child: Center(child: CircularProgressIndicator()));
+                  child: Center(child: CircularProgressIndicator())
+              );
             }
 
             if (projectSnap.hasData == null) {
@@ -80,20 +83,23 @@ class _ContactsViewState extends State<ContactsView> {
                       width: 15,
                     ),
                     Expanded(
-                      child: Text(
-                        user["name"]["first"] + " " + user["name"]["last"],
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: index == 0
-                              ? Colors.white
-                              : Color.fromRGBO(222, 222, 222, 10),
-                          fontSize: 17,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            user["name"]["first"] + " " + user["name"]["last"],
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 17,
+                            ),
+                          )
+                        ],
                       ),
                     )
                   ],
                 ));
-          }, childCount: childCount),
+          },
         );
       },
     );
