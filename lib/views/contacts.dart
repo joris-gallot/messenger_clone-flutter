@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:lipsum/lipsum.dart' as lipsum;
 import 'dart:math';
 
-class ChatsView extends StatefulWidget {
-  ChatsView() : super();
+class ContactsView extends StatefulWidget {
+  ContactsView() : super();
 
   @override
-  _ChatsViewState createState() => _ChatsViewState();
+  _ContactsViewState createState() => _ContactsViewState();
 }
 
-class _ChatsViewState extends State<ChatsView> {
+class _ContactsViewState extends State<ContactsView> {
   final random = Random();
   Future _loadingUsers;
 
@@ -32,17 +31,14 @@ class _ChatsViewState extends State<ChatsView> {
           childCount = projectSnap.data["results"].length;
         }
 
-        return ListView.builder(
-          padding: EdgeInsets.all(0.0),
-          itemCount: childCount,
-          itemBuilder: (context, index) {
+        return SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
             var user = projectSnap.data["results"][index];
 
             if (projectSnap.connectionState != ConnectionState.done) {
               return Container(
                   margin: EdgeInsets.only(top: 20),
-                  child: Center(child: CircularProgressIndicator())
-              );
+                  child: Center(child: CircularProgressIndicator()));
             }
 
             if (projectSnap.hasData == null) {
@@ -84,40 +80,20 @@ class _ChatsViewState extends State<ChatsView> {
                       width: 15,
                     ),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            user["name"]["first"] + " " + user["name"]["last"],
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: index == 0
-                                  ? Colors.white
-                                  : Color.fromRGBO(222, 222, 222, 10),
-                              fontSize: 17,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            lipsum.createParagraph(),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: index == 0
-                                    ? Colors.white
-                                    : Color.fromRGBO(222, 222, 222, 10),
-                                fontWeight: index == 0
-                                    ? FontWeight.bold
-                                    : FontWeight.normal),
-                          )
-                        ],
+                      child: Text(
+                        user["name"]["first"] + " " + user["name"]["last"],
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: index == 0
+                              ? Colors.white
+                              : Color.fromRGBO(222, 222, 222, 10),
+                          fontSize: 17,
+                        ),
                       ),
                     )
                   ],
                 ));
-          },
+          }, childCount: childCount),
         );
       },
     );
