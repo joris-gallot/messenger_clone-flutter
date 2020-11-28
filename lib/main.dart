@@ -16,7 +16,7 @@ class MessengerCloneApp extends StatelessWidget {
       title: 'Messenger clone app',
       theme: ThemeData(
         brightness: Brightness.dark,
-        accentColor: Color.fromRGBO(0, 137, 255, 10),
+        accentColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: HomeView(),
